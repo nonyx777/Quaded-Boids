@@ -25,10 +25,20 @@ Scene *Scene::getInstance()
 
 void Scene::update(float dt)
 {
+    //..
+}
+
+void Scene::update(sf::Vector2f &desired, float dt)
+{
+    for (Circle &vehicle : this->vehicles)
+        vehicle.update(desired, vehicles, dt);
 }
 
 void Scene::render(sf::RenderTarget *target)
 {
+    for (Circle &vehicle : this->vehicles)
+        vehicle.render(target);
+
     if (this->grid.size() > 0)
     {
         for (uint i = 0; i < grid.size(); i++)
@@ -39,4 +49,10 @@ void Scene::render(sf::RenderTarget *target)
             }
         }
     }
+}
+
+void Scene::generateVehicles(sf::Vector2f &position)
+{
+    Circle vehicle = Circle(1.f, position);
+    this->vehicles.push_back(vehicle);
 }

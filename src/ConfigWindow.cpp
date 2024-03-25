@@ -19,7 +19,7 @@ void ConfigWindow::update(float dt)
     this->pollEvent();
 
     this->updateImGui();
-    ImGui::Begin("Parameters", nullptr, ImGuiWindowFlags_NoMove);
+    ImGui::Begin("Parameters");
     ImGui::SetWindowSize(ImVec2(this->window->getSize()));
 
     // configure engine window size

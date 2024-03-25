@@ -12,6 +12,7 @@ class Scene : public GameObject
 private:
     static Scene *instance;
     std::vector<std::vector<Box>> grid;
+    std::vector<Circle> vehicles;
 
 private:
     Scene();
@@ -25,5 +26,8 @@ public:
     static Scene *getInstance();
 
     void update(float dt) override;
+    void update(sf::Vector2f &desired, float dt);
     void render(sf::RenderTarget *target) override;
+
+    void generateVehicles(sf::Vector2f &position);
 };

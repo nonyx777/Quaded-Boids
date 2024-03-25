@@ -14,6 +14,7 @@ public:
 public:
     Engine();
 
+    void pollEvent() override;
     void update(float dt) override;
     void render(sf::RenderTarget *target) override;
     void render();
