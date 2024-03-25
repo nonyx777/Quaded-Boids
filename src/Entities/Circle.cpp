@@ -39,8 +39,15 @@ void Circle::update(float dt)
 
 void Circle::update(sf::Vector2f &desired, std::vector<Circle> &vehicles, float dt)
 {
-    this->steer(desired);
-    this->separate(vehicles);
+    sf::Vector2f seek = this->seek(desired);
+    sf::Vector2f separate = this->separate(vehicles);
+    sf::Vector2f align = this->align(vehicles);
+    sf::Vector2f cohesion = this->cohesion(vehicles);
+    seek *= 0.5f;
+    separate *= 1.3f;
+    align *= 1.5f;
+    cohesion *= 1.3f;
+    this->linearAcceleration += seek + separate + align + cohesion;
     this->linearEuler(&this->property);
 }
 
@@ -49,7 +56,7 @@ void Circle::render(sf::RenderTarget *target)
     target->draw(this->property);
 }
 
-void Circle::steer(sf::Vector2f &desired_)
+sf::Vector2f Circle::seek(sf::Vector2f &desired_)
 {
     // multiplied by 1.01 because of a bug when desired and vehicle position
     // is the same when the vehicle is created
@@ -70,10 +77,10 @@ void Circle::steer(sf::Vector2f &desired_)
     sf::Vector2f steer = desired - this->linearVelocity;
     steer *= maxForce;
 
-    this->linearAcceleration += steer;
+    return steer;
 }
 
-void Circle::separate(std::vector<Circle> &vehicles)
+sf::Vector2f Circle::separate(std::vector<Circle> &vehicles)
 {
     float separation = this->property.getRadius() * 2.f;
     sf::Vector2f sum;
@@ -97,8 +104,61 @@ void Circle::separate(std::vector<Circle> &vehicles)
         sum *= maxSpeed;
         sf::Vector2f steer = sum - this->linearVelocity;
         steer *= maxForce;
-        this->linearAcceleration += steer;
+        return steer;
     }
+    return sum;
+}
+
+sf::Vector2f Circle::align(std::vector<Circle> &vehicles)
+{
+    float separation = this->property.getRadius() * 2.f;
+    sf::Vector2f sum;
+    int count = 0;
+    for (Circle &vehicle : vehicles)
+    {
+        float d = Math::_length(this->property.getPosition() - vehicle.property.getPosition());
+        if (((int)d > 0) && d < separation)
+        {
+            sum += vehicle.linearVelocity;
+            count++;
+        }
+    }
+    if (count > 0)
+    {
+        sum /= (float)count;
+        sum = Math::_normalize(sum);
+        sum *= maxSpeed;
+        sf::Vector2f steer = sum - this->linearVelocity;
+        steer *= maxForce;
+        return steer;
+    }
+    return sum;
+}
+
+sf::Vector2f Circle::cohesion(std::vector<Circle> &vehicles)
+{
+    float separation = this->property.getRadius() * 2.f;
+    sf::Vector2f sum;
+    int count = 0;
+    for (Circle &vehicle : vehicles)
+    {
+        float d = Math::_length(this->property.getPosition() - vehicle.property.getPosition());
+        if (((int)d > 0) && d < separation)
+        {
+            sum += vehicle.property.getPosition();
+            count++;
+        }
+    }
+    if (count > 0)
+    {
+        sum /= (float)count;
+        sum = Math::_normalize(sum);
+        sum *= maxSpeed;
+        sf::Vector2f steer = sum - this->linearVelocity;
+        steer *= maxForce;
+        return steer;
+    }
+    return sum;
 }
 
 sf::Vector2f Circle::limit(sf::Vector2f steer_, float max)

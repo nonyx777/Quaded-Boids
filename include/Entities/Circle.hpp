@@ -26,8 +26,11 @@ public:
     void update(sf::Vector2f &desired, std::vector<Circle> &vehicles, float dt);
     void render(sf::RenderTarget *target) override;
 
-    void steer(sf::Vector2f &desired);
-    void separate(std::vector<Circle> &vehicles);
+    sf::Vector2f seek(sf::Vector2f &desired);
+    sf::Vector2f separate(std::vector<Circle> &vehicles);
+    sf::Vector2f align(std::vector<Circle> &vehicles);
+    sf::Vector2f cohesion(std::vector<Circle> &vehicles);
+
     sf::Vector2f limit(sf::Vector2f steer_, float max);
     float map(float d, float max1, float max2);
 };
