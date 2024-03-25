@@ -4,13 +4,15 @@
 #include "../Rigidbody.hpp"
 #include "Entity.hpp"
 #include "../Util/Math.hpp"
+#include "../Globals.hpp"
+#include <random>
 
 class Circle : public GameObject, public Rigidbody, public Entity
 {
 public:
     sf::CircleShape property;
 
-private:
+public:
     void initVariables();
     float maxSpeed = 4.f;
     float maxForce = 0.03f;
@@ -30,6 +32,8 @@ public:
     sf::Vector2f separate(std::vector<Circle> &vehicles);
     sf::Vector2f align(std::vector<Circle> &vehicles);
     sf::Vector2f cohesion(std::vector<Circle> &vehicles);
+    sf::Vector2f wander();
+    void edge();
 
     sf::Vector2f limit(sf::Vector2f steer_, float max);
     float map(float d, float max1, float max2);

@@ -54,5 +54,7 @@ void Scene::render(sf::RenderTarget *target)
 void Scene::generateVehicles(sf::Vector2f &position)
 {
     Circle vehicle = Circle(1.f, position);
+    vehicle.linearVelocity = sf::Vector2f(-1.f, 0.f);
+
     this->vehicles.push_back(vehicle);
 }

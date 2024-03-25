@@ -3,6 +3,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <math.h>
+#include <random>
 
 #define PI 3.14159265
 
@@ -39,4 +40,5 @@ public:
     static sf::Vector2f _minVector(std::vector<sf::Vector2f> &vectors);
     static sf::Vector2f _maxVector(std::vector<sf::Vector2f> &vectors);
     static float _lerp(float min, float max, float t);
+    static int random(int min, int max);
 };

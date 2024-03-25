@@ -93,7 +93,7 @@ float Math::_angleBtn(sf::Vector2f a, sf::Vector2f b)
     return angle;
 }
 
-//defining additional support functions
+// defining additional support functions
 float Math::_clampOnRange(float x, float min, float max)
 {
     if (x < min)
@@ -138,5 +138,17 @@ sf::Vector2f Math::_maxVector(std::vector<sf::Vector2f> &vectors)
 float Math::_lerp(float min, float max, float t)
 {
     float value = (1.f - t) * min + max * t;
-    return  value;
+    return value;
+}
+
+int Math::random(int min, int max)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::uniform_int_distribution<int> distribution(min, max);
+
+    int random_number = distribution(gen);
+
+    return random_number;
 }
