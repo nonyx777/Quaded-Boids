@@ -27,6 +27,8 @@ void Engine::pollEvent()
         case sf::Event::KeyPressed:
             if (this->event.key.code == sf::Keyboard::Q)
                 scene->generateVehicles(this->mouse_position_view);
+            if (this->event.key.code == sf::Keyboard::E)
+                GLOBAL::target = !GLOBAL::target;
             break;
         }
     }
@@ -42,6 +44,10 @@ void Engine::update(float dt)
     this->updateImGui();
     ImGui::Begin("Proto");
     ImGui::Text("FPS: %f", GLOBAL::fps);
+    ImGui::Text("Boids population: %d", GLOBAL::boids);
+    ImGui::Text("Boid size: %d", GLOBAL::size);
+    ImGui::Text("Boids range offset: %d", GLOBAL::range_offset);
+    ImGui::Text("Target: %d", GLOBAL::target);
     ImGui::End();
 }
 void Engine::render(sf::RenderTarget *target)

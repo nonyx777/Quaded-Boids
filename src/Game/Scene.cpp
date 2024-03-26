@@ -37,11 +37,11 @@ void Scene::update(sf::Vector2f &desired, float dt)
     for (Circle &vehicle : this->vehicles)
     {
         sf::Vector2f topleft = sf::Vector2f(
-            vehicle.property.getPosition().x - 20.f,
-            vehicle.property.getPosition().y - 20.f);
+            vehicle.property.getPosition().x - GLOBAL::range_offset,
+            vehicle.property.getPosition().y - GLOBAL::range_offset);
         sf::Vector2f botright = sf::Vector2f(
-            vehicle.property.getPosition().x + 20.f,
-            vehicle.property.getPosition().y + 20.f);
+            vehicle.property.getPosition().x + GLOBAL::range_offset,
+            vehicle.property.getPosition().y + GLOBAL::range_offset);
         
         std::vector<Circle*> in_range = quadtree.search(topleft, botright);
         vehicle.update(desired, in_range, dt);
@@ -69,10 +69,11 @@ void Scene::render(sf::RenderTarget *target)
 
 void Scene::generateVehicles(sf::Vector2f &position)
 {
-    Circle vehicle = Circle(5.f, position);
+    Circle vehicle = Circle(GLOBAL::size, position);
     float x = Math::random(-3, 3);
     float y = Math::random(-3, 3);
     vehicle.linearVelocity = sf::Vector2f(x, y);
 
     this->vehicles.push_back(vehicle);
+    GLOBAL::boids = this->vehicles.size();
 }

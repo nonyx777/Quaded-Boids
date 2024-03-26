@@ -37,6 +37,11 @@ void ConfigWindow::update(float dt)
         GLOBAL::display_grid = !GLOBAL::display_grid;
     ImGui::Text("Display Grid: %s", GLOBAL::display_grid ? "True" : "False");
 
+    //Simulaiton parameters
+    ImGui::Text("Simulation parameters");
+    ImGui::InputInt("boid size", &GLOBAL::size);
+    ImGui::InputInt("range offset", &GLOBAL::range_offset);
+
     ImGui::End();
 }
 

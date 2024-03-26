@@ -37,16 +37,22 @@ void Circle::update(float dt)
     //...
 }
 
-void Circle::update(sf::Vector2f &desired, std::vector<Circle*> &vehicles, float dt)
+void Circle::update(sf::Vector2f &desired, std::vector<Circle *> &vehicles, float dt)
 {
+    sf::Vector2f seek = this->seek(desired);
     sf::Vector2f separate = this->separate(vehicles);
     sf::Vector2f align = this->align(vehicles);
     sf::Vector2f cohesion = this->cohesion(vehicles);
-    separate *= 5.f;
-    align *= 5.f;
+    seek *= 1.f;
+    separate *= 3.f;
+    align *= 4.f;
     cohesion *= 2.f;
     this->edge();
-    this->linearAcceleration += separate + align + cohesion;
+    if (GLOBAL::target)
+        this->linearAcceleration += seek + separate + align + cohesion;
+    else
+        this->linearAcceleration += separate + align + cohesion;
+
     this->linearEuler(&this->property);
 
     if (this->linearVelocity.x > maxSpeed || this->linearVelocity.y > maxSpeed)
@@ -85,12 +91,12 @@ sf::Vector2f Circle::seek(sf::Vector2f &desired_)
     return steer;
 }
 
-sf::Vector2f Circle::separate(std::vector<Circle*> &vehicles)
+sf::Vector2f Circle::separate(std::vector<Circle *> &vehicles)
 {
-    float separation = this->property.getRadius() * 2.f;
+    float separation = this->property.getRadius() * 4.f;
     sf::Vector2f sum;
     int count = 0;
-    for (Circle* &vehicle : vehicles)
+    for (Circle *&vehicle : vehicles)
     {
         float d = Math::_length(this->property.getPosition() - vehicle->property.getPosition());
         if (((int)d > 0) && d < separation)
@@ -117,12 +123,12 @@ sf::Vector2f Circle::separate(std::vector<Circle*> &vehicles)
     }
 }
 
-sf::Vector2f Circle::align(std::vector<Circle*> &vehicles)
+sf::Vector2f Circle::align(std::vector<Circle *> &vehicles)
 {
     float align_value = 50.f;
     sf::Vector2f sum;
     int count = 0;
-    for (Circle* &vehicle : vehicles)
+    for (Circle *&vehicle : vehicles)
     {
         float d = Math::_length(this->property.getPosition() - vehicle->property.getPosition());
         if (((int)d > 0) && d < align_value)
@@ -146,12 +152,12 @@ sf::Vector2f Circle::align(std::vector<Circle*> &vehicles)
     }
 }
 
-sf::Vector2f Circle::cohesion(std::vector<Circle*> &vehicles)
+sf::Vector2f Circle::cohesion(std::vector<Circle *> &vehicles)
 {
     float center_value = 50.f;
     sf::Vector2f sum;
     int count = 0;
-    for (Circle* &vehicle : vehicles)
+    for (Circle *&vehicle : vehicles)
     {
         float d = Math::_length(this->property.getPosition() - vehicle->property.getPosition());
         if (((int)d > 0) && d < center_value)
@@ -170,21 +176,6 @@ sf::Vector2f Circle::cohesion(std::vector<Circle*> &vehicles)
     {
         return sf::Vector2f(0.f, 0.f);
     }
-}
-
-sf::Vector2f Circle::wander()
-{
-    // float radius = 5.f;
-    // sf::Vector2f future_pos = (this->property.getPosition() + this->linearVelocity) * 2.f;
-
-    // int random_angle = random(-360, 360);
-    // float x = radius * Math::_cos(random_angle);
-    // float y = radius * Math::_sin(random_angle);
-
-    // sf::Vector2f coord = sf::Vector2f(x, y);
-    // coord += future_pos;
-
-    // return coord;
 }
 
 void Circle::edge()

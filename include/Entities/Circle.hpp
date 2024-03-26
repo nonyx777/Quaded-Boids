@@ -14,8 +14,8 @@ public:
 
 public:
     void initVariables();
-    float maxSpeed = 4.f;
-    float maxForce = 0.03f;
+    float maxSpeed = 3.f;
+    float maxForce = 0.05f;
     float minDistance = 200.f;
 
 public:
@@ -32,7 +32,6 @@ public:
     sf::Vector2f separate(std::vector<Circle*> &vehicles);
     sf::Vector2f align(std::vector<Circle*> &vehicles);
     sf::Vector2f cohesion(std::vector<Circle*> &vehicles);
-    sf::Vector2f wander();
     void edge();
 
     sf::Vector2f limit(sf::Vector2f steer_, float max);
