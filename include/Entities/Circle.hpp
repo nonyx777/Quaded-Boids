@@ -25,13 +25,13 @@ public:
 
     void calcMomentOfInertia() override;
     void update(float dt) override;
-    void update(sf::Vector2f &desired, std::vector<Circle> &vehicles, float dt);
+    void update(sf::Vector2f &desired, std::vector<Circle*> &vehicles, float dt);
     void render(sf::RenderTarget *target) override;
 
     sf::Vector2f seek(sf::Vector2f &desired);
-    sf::Vector2f separate(std::vector<Circle> &vehicles);
-    sf::Vector2f align(std::vector<Circle> &vehicles);
-    sf::Vector2f cohesion(std::vector<Circle> &vehicles);
+    sf::Vector2f separate(std::vector<Circle*> &vehicles);
+    sf::Vector2f align(std::vector<Circle*> &vehicles);
+    sf::Vector2f cohesion(std::vector<Circle*> &vehicles);
     sf::Vector2f wander();
     void edge();
 

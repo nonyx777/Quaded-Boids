@@ -6,6 +6,7 @@
 #include "../Util/Grid.hpp"
 #include "../Globals.hpp"
 #include "../Util/Collision.hpp"
+#include "../Util/Quadtree.hpp"
 #include <random>
 
 
@@ -15,6 +16,7 @@ private:
     static Scene *instance;
     std::vector<std::vector<Box>> grid;
     std::vector<Circle> vehicles;
+    Quad quadtree;
 
 private:
     Scene();

@@ -8,6 +8,7 @@ Scene::Scene()
     {
         configureGrid(GLOBAL::cell_size, &this->grid);
     }
+    quadtree = Quad(sf::Vector2f(0.f, 0.f), sf::Vector2f(GLOBAL::window_width, GLOBAL::window_height));
 }
 
 Scene::~Scene()
@@ -31,7 +32,22 @@ void Scene::update(float dt)
 void Scene::update(sf::Vector2f &desired, float dt)
 {
     for (Circle &vehicle : this->vehicles)
-        vehicle.update(desired, vehicles, dt);
+        quadtree.insert(&vehicle);
+
+    for (Circle &vehicle : this->vehicles)
+    {
+        sf::Vector2f topleft = sf::Vector2f(
+            vehicle.property.getPosition().x - 20.f,
+            vehicle.property.getPosition().y - 20.f);
+        sf::Vector2f botright = sf::Vector2f(
+            vehicle.property.getPosition().x + 20.f,
+            vehicle.property.getPosition().y + 20.f);
+        
+        std::vector<Circle*> in_range = quadtree.search(topleft, botright);
+        vehicle.update(desired, in_range, dt);
+    }
+
+    quadtree.clear();
 }
 
 void Scene::render(sf::RenderTarget *target)
@@ -53,7 +69,7 @@ void Scene::render(sf::RenderTarget *target)
 
 void Scene::generateVehicles(sf::Vector2f &position)
 {
-    Circle vehicle = Circle(1.f, position);
+    Circle vehicle = Circle(5.f, position);
     float x = Math::random(-3, 3);
     float y = Math::random(-3, 3);
     vehicle.linearVelocity = sf::Vector2f(x, y);
