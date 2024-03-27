@@ -4,10 +4,6 @@ Scene *Scene::instance = nullptr;
 
 Scene::Scene()
 {
-    if (GLOBAL::display_grid)
-    {
-        configureGrid(GLOBAL::cell_size, &this->grid);
-    }
     quadtree = Quad(sf::Vector2f(0.f, 0.f), sf::Vector2f(GLOBAL::window_width, GLOBAL::window_height));
 }
 
@@ -54,17 +50,6 @@ void Scene::render(sf::RenderTarget *target)
 {
     for (Circle &vehicle : this->vehicles)
         vehicle.render(target);
-
-    if (this->grid.size() > 0)
-    {
-        for (uint i = 0; i < grid.size(); i++)
-        {
-            for (uint j = 0; j < grid[i].size(); j++)
-            {
-                target->draw(grid[i][j].property);
-            }
-        }
-    }
 }
 
 void Scene::generateVehicles(sf::Vector2f &position)

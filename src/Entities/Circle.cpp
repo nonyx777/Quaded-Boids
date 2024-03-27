@@ -46,7 +46,7 @@ void Circle::update(sf::Vector2f &desired, std::vector<Circle *> &vehicles, floa
     seek *= 1.f;
     separate *= 3.f;
     align *= 4.f;
-    cohesion *= 2.f;
+    cohesion *= 3.f;
     this->edge();
     if (GLOBAL::target)
         this->linearAcceleration += seek + separate + align + cohesion;
@@ -183,29 +183,37 @@ void Circle::edge()
     sf::Vector2f position = this->property.getPosition();
     sf::Vector2f desired;
 
-    if (position.x < 10.f)
+    if (position.x < 20.f)
     {
-        this->property.setPosition(10.f, position.y);
-        desired = sf::Vector2f(-this->linearVelocity.x, this->linearVelocity.y);
-        this->linearVelocity = desired;
+        sf::Vector2f desired = sf::Vector2f(maxSpeed * 5.f, this->linearVelocity.y);
+        sf::Vector2f steer = desired - this->linearVelocity;
+        steer = Math::_normalize(steer);
+        steer *= maxForce * 3.f;
+        this->linearAcceleration += steer;
     }
-    if (position.x > GLOBAL::window_width - 10.f)
+    if (position.x > GLOBAL::window_width - 20.f)
     {
-        this->property.setPosition(GLOBAL::window_width - 10.f, position.y);
-        desired = sf::Vector2f(-this->linearVelocity.x, this->linearVelocity.y);
-        this->linearVelocity = desired;
+        sf::Vector2f desired = sf::Vector2f(-maxSpeed * 5.f, this->linearVelocity.y);
+        sf::Vector2f steer = desired - this->linearVelocity;
+        steer = Math::_normalize(steer);
+        steer *= maxForce * 3.f;
+        this->linearAcceleration += steer;
     }
-    if (position.y < 10.f)
+    if (position.y < 20.f)
     {
-        this->property.setPosition(position.x, 10.f);
-        desired = sf::Vector2f(this->linearVelocity.x, -this->linearVelocity.y);
-        this->linearVelocity = desired;
+        sf::Vector2f desired = sf::Vector2f(this->linearVelocity.x, maxSpeed * 5.f);
+        sf::Vector2f steer = desired - this->linearVelocity;
+        steer = Math::_normalize(steer);
+        steer *= maxForce * 3.f;
+        this->linearAcceleration += steer;
     }
-    if (position.y > GLOBAL::window_height - 10.f)
+    if (position.y > GLOBAL::window_height - 20.f)
     {
-        this->property.setPosition(position.x, GLOBAL::window_height - 10.f);
-        desired = sf::Vector2f(this->linearVelocity.x, -this->linearVelocity.y);
-        this->linearVelocity = desired;
+        sf::Vector2f desired = sf::Vector2f(this->linearVelocity.x, -maxSpeed * 5.f);
+        sf::Vector2f steer = desired - this->linearVelocity;
+        steer = Math::_normalize(steer);
+        steer *= maxForce * 3.f;
+        this->linearAcceleration += steer;
     }
 }
 

@@ -14,7 +14,6 @@ class Scene : public GameObject
 {
 private:
     static Scene *instance;
-    std::vector<std::vector<Box>> grid;
     std::vector<Circle> vehicles;
     Quad quadtree;
 

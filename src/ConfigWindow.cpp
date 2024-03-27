@@ -30,13 +30,6 @@ void ConfigWindow::update(float dt)
     GLOBAL::window_height = Math::_clampOnRange(GLOBAL::window_height, 400, 1000);
     GLOBAL::window_width = Math::_clampOnRange(GLOBAL::window_width, 400, 1000);
 
-    // configure grid
-    ImGui::Text("Grid Configuration");
-    ImGui::InputInt("Cell Size", &GLOBAL::cell_size);
-    if (ImGui::Button("Display Grid"))
-        GLOBAL::display_grid = !GLOBAL::display_grid;
-    ImGui::Text("Display Grid: %s", GLOBAL::display_grid ? "True" : "False");
-
     //Simulaiton parameters
     ImGui::Text("Simulation parameters");
     ImGui::InputInt("boid size", &GLOBAL::size);
